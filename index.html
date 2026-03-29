@@ -62,6 +62,11 @@ button {
     font-weight: bold;
     cursor: pointer;
 }
+
+.status {
+    margin-top: 10px;
+    color: #aaa;
+}
 </style>
 </head>
 
@@ -92,13 +97,14 @@ button {
 
 <button onclick="submitLead()">Submit</button>
 
-<p id="status"></p>
+<p class="status" id="status"></p>
 
 </div>
 
 <script>
 const chatBox = document.getElementById("chat");
 
+// ADD MESSAGE TO CHAT
 function addMessage(text, type) {
     const div = document.createElement("div");
     div.className = "msg " + type;
@@ -107,33 +113,50 @@ function addMessage(text, type) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// 🔥 CONNECT TO YOUR BACKEND
+// 🔥 YOUR BACKEND URL
 const API_URL = "https://miserbot-v10-production.up.railway.app";
 
-// CHAT (simple endpoint you can expand later)
+// REAL AI CHAT
 function sendMessage() {
     const input = document.getElementById("message");
-    const text = input.value;
+    const text = input.value.trim();
 
     if (!text) return;
 
     addMessage(text, "user");
     input.value = "";
 
-    // For now, simulate until /chat endpoint exists
-    addMessage("Thanks! Please use the form below so we can assist you.", "bot");
+    fetch(API_URL + "/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        addMessage(data.reply || "No response.", "bot");
+    })
+    .catch(() => {
+        addMessage("⚠️ Connection error.", "bot");
+    });
 }
 
-// LEAD FORM (THIS IS LIVE)
+// LEAD FORM (WORKING)
 function submitLead() {
     const status = document.getElementById("status");
 
     const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
         service: document.getElementById("service").value
     };
+
+    if (!data.name || !data.email || !data.phone) {
+        status.innerText = "⚠️ Please fill all fields.";
+        return;
+    }
 
     status.innerText = "Sending...";
 
