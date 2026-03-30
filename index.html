@@ -6,47 +6,123 @@
 <title>GetMiserBot</title>
 
 <style>
-body { margin:0; font-family:Arial; background:#0b0b0b; color:white; }
-header { padding:15px; text-align:center; border-bottom:1px solid #222; }
-.container { max-width:500px; margin:auto; padding:20px; }
-.chat-box { height:400px; overflow-y:auto; border:1px solid #222; padding:10px; background:#111; margin-bottom:10px; }
-.msg { margin:8px 0; }
-.user { text-align:right; color:#4da6ff; }
-.bot { text-align:left; color:#ccc; }
-input, button, select { width:100%; padding:10px; margin:5px 0; border:none; }
-button { background:white; color:black; font-weight:bold; cursor:pointer; }
-.status { margin-top:10px; color:#aaa; }
+body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Arial;
+    background: #0a0a0a;
+    color: #fff;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px 20px;
+}
+
+.hero h1 {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.hero p {
+    color: #aaa;
+    margin-top: 10px;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    padding: 20px;
+}
+
+.chat-box {
+    height: 400px;
+    overflow-y: auto;
+    background: #111;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #222;
+}
+
+.msg {
+    margin: 10px 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.user {
+    background: #1f6feb;
+    margin-left: auto;
+}
+
+.bot {
+    background: #222;
+    margin-right: auto;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #222;
+    background: #111;
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    background: white;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form {
+    margin-top: 40px;
+    background: #111;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #222;
+}
+
+.status {
+    text-align: center;
+    margin-top: 10px;
+    color: #aaa;
+}
 </style>
 </head>
 
 <body>
 
-<header>GetMiserBot</header>
+<div class="hero">
+    <h1>Automate Your Business with AI</h1>
+    <p>Capture leads. Close clients. Scale instantly.</p>
+</div>
 
 <div class="container">
 
 <div class="chat-box" id="chat"></div>
 
-<input id="message" placeholder="Type your message...">
+<input id="message" placeholder="Ask anything...">
 <button onclick="sendMessage()">Send</button>
 
-<hr>
-
-<h3>Quick Lead Form</h3>
+<div class="form">
+<h3>Get Started</h3>
 
 <input id="name" placeholder="Full Name">
 <input id="email" placeholder="Email">
 <input id="phone" placeholder="Phone">
 
-<select id="service">
-<option>Business Automation</option>
-<option>Astrocartography</option>
-<option>Real Estate</option>
-</select>
-
-<button onclick="submitLead()">Submit</button>
+<button onclick="submitLead()">Request Demo</button>
 
 <p class="status" id="status"></p>
+</div>
 
 </div>
 
@@ -54,7 +130,6 @@ button { background:white; color:black; font-weight:bold; cursor:pointer; }
 const API_URL = "https://miserbot-v10-production.up.railway.app";
 const chatBox = document.getElementById("chat");
 
-// ADD MESSAGE
 function addMessage(text, type) {
     const div = document.createElement("div");
     div.className = "msg " + type;
@@ -63,11 +138,9 @@ function addMessage(text, type) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// CHAT
 function sendMessage() {
     const input = document.getElementById("message");
     const text = input.value.trim();
-
     if (!text) return;
 
     addMessage(text, "user");
@@ -79,32 +152,25 @@ function sendMessage() {
         body: JSON.stringify({ message: text })
     })
     .then(res => res.json())
-    .then(data => {
-        addMessage(data.reply || "No response", "bot");
-    })
-    .catch(() => {
-        addMessage("⚠️ Connection error", "bot");
-    });
+    .then(data => addMessage(data.reply, "bot"))
+    .catch(() => addMessage("Connection error", "bot"));
 }
 
-// FORM (FIXED RESET)
 function submitLead() {
     const status = document.getElementById("status");
 
     const name = document.getElementById("name");
     const email = document.getElementById("email");
     const phone = document.getElementById("phone");
-    const service = document.getElementById("service");
 
     const data = {
-        name: name.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-        service: service.value
+        name: name.value,
+        email: email.value,
+        phone: phone.value
     };
 
     if (!data.name || !data.email || !data.phone) {
-        status.innerText = "⚠️ Please fill all fields.";
+        status.innerText = "Fill all fields";
         return;
     }
 
@@ -115,24 +181,13 @@ function submitLead() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
     })
-    .then(res => res.json())
     .then(() => {
-        status.innerText = "✅ Submitted successfully!";
-
-        // 🔥 RESET FORM FIELDS
+        status.innerText = "Submitted ✔";
         name.value = "";
         email.value = "";
         phone.value = "";
-        service.selectedIndex = 0;
-
-        // OPTIONAL: CLEAR STATUS AFTER 3s
-        setTimeout(() => {
-            status.innerText = "";
-        }, 3000);
     })
-    .catch(() => {
-        status.innerText = "❌ Error submitting.";
-    });
+    .catch(() => status.innerText = "Error");
 }
 </script>
 
