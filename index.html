@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Miserbot AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      padding: 80px 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #cbd5f5;
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 80%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      background: #6366f1;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4f46e5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Automate Your Business with AI</h1>
+    <p>Capture leads. Close clients. Scale instantly.</p>
+
+    <input id="name" placeholder="Your Name"><br>
+    <input id="email" placeholder="Your Email"><br>
+
+    <button onclick="submitForm()">Get Started</button>
+  </div>
+
+  <script>
+    function submitForm() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+
+      if (!name || !email) {
+        alert("Please fill out all fields");
+        return;
+      }
+
+      alert("Submitted! (Next step: connect backend)");
+    }
+  </script>
+
+</body>
+</html>
