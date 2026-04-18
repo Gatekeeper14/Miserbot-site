@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BAZRAGOD Network — Parish 14 Nation</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-light: #F5D97E;
+    --gold-dark: #A0821A;
+    --black: #000000;
+    --dark: #0A0A0A;
+    --dark2: #111111;
+    --dark3: #1A1A1A;
+    --dark4: #222222;
+    --text: #FFFFFF;
+    --text-dim: #888888;
+    --red: #FF4444;
+    --green: #44FF88;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .screen { display: none; min-height: 100vh; padding-bottom: 80px; }
+  .screen.active { display: block; }
+
+  /* TOP BAR */
+  .topbar {
+    background: linear-gradient(135deg, #0A0A0A, #1A1400);
+    border-bottom: 1px solid var(--gold-dark);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .topbar-coins {
+    background: var(--gold-dark);
+    color: var(--gold-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(180deg, #1A1400 0%, #000000 100%);
+    padding: 32px 16px 24px;
+    text-align: center;
+    border-bottom: 1px solid #1A1400;
+  }
+  .hero-name {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--gold);
+    letter-spacing: 8px;
+    text-shadow: 0 0 30px rgba(212,175,55,0.5);
+    margin-bottom: 4px;
+  }
+  .hero-sub {
+    font-size: 11px;
+    color: var(--gold-dark);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .hero-stat {
+    text-align: center;
+  }
+  .hero-stat-num {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--gold);
+  }
+  .hero-stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* GRID NAV */
+  .grid-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px 16px;
+  }
+  .grid-btn {
+    background: linear-gradient(135deg, #1A1400, #0D0D00);
+    border: 1px solid var(--gold-dark);
+    border-radius: 12px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+  .grid-btn:active { transform: scale(0.96); background: #2A2000; }
+  .grid-btn-icon { font-size: 28px; margin-bottom: 8px; }
+  .grid-btn-label {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .grid-btn-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* SECTION */
+  .section { padding: 0 16px 20px; }
+  .section-title {
+    font-size: 11px;
+    color: var(--gold-dark);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 16px 0 12px;
+    border-bottom: 1px solid #1A1400;
+    margin-bottom: 12px;
+  }
+
+  /* SONG CARD */
+  .song-card {
+    background: var(--dark3);
+    border: 1px solid #1A1A1A;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .song-card:active { background: #1A1400; border-color: var(--gold-dark); }
+  .song-num {
+    width: 32px;
+    height: 32px;
+    background: var(--gold-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--black);
+    flex-shrink: 0;
+  }
+  .song-info { flex: 1; }
+  .song-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .song-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .song-fire {
+    font-size: 11px;
+    color: var(--gold);
+  }
+  .song-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .btn-small {
+    background: var(--gold-dark);
+    color: var(--black);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+  .btn-small:active { background: var(--gold); }
+  .btn-small.outline {
+    background: transparent;
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+  }
+
+  /* PASSPORT */
+  .passport-card {
+    background: linear-gradient(135deg, #1A1400, #0A0A00);
+    border: 2px solid var(--gold-dark);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .passport-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+  }
+  .passport-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .passport-logo {
+    font-size: 11px;
+    color: var(--gold-dark);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .passport-flag { font-size: 24px; }
+  .passport-field {
+    margin-bottom: 14px;
+  }
+  .passport-label {
+    font-size: 9px;
+    color: var(--gold-dark);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .passport-value {
+    font-size: 16px;
+    color: var(--text);
+    font-weight: bold;
+  }
+  .passport-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .passport-tier {
+    display: inline-block;
+    background: var(--gold-dark);
+    color: var(--black);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .passport-rank {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--gold);
+  }
+
+  /* LEADERBOARD */
+  .lb-item {
+    background: var(--dark3);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .lb-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .lb-rank.gold { background: var(--gold); color: var(--black); }
+  .lb-rank.silver { background: #C0C0C0; color: var(--black); }
+  .lb-rank.bronze { background: #CD7F32; color: var(--black); }
+  .lb-rank.other { background: var(--dark4); color: var(--text-dim); }
+  .lb-name { flex: 1; font-size: 14px; font-weight: bold; }
+  .lb-pts { font-size: 12px; color: var(--gold); font-weight: bold; }
+  .lb-tier { font-size: 10px; color: var(--text-dim); }
+
+  /* VAULT */
+  .vault-item {
+    background: var(--dark3);
+    border: 1px solid #1A1A1A;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .vault-item.unlocked { border-color: var(--gold-dark); }
+  .vault-item.locked { opacity: 0.7; }
+  .vault-title { font-size: 15px; font-weight: bold; margin-bottom: 4px; }
+  .vault-req { font-size: 11px; color: var(--text-dim); margin-bottom: 12px; }
+  .vault-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .vault-status.unlocked { background: var(--gold-dark); color: var(--black); }
+  .vault-status.locked { background: var(--dark4); color: var(--text-dim); }
+  .vault-status.available { background: #1A3A00; color: var(--green); }
+
+  /* COINS */
+  .coins-hero {
+    text-align: center;
+    padding: 32px 16px;
+    background: linear-gradient(180deg, #1A1400, #000);
+    margin-bottom: 20px;
+  }
+  .coins-amount {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(212,175,55,0.4);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .coins-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .coins-tier {
+    display: inline-block;
+    background: var(--gold-dark);
+    color: var(--black);
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  .earn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px;
+    margin-bottom: 20px;
+  }
+  .earn-card {
+    background: var(--dark3);
+    border: 1px solid #1A1A1A;
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .earn-card:active { border-color: var(--gold-dark); }
+  .earn-icon { font-size: 24px; margin-bottom: 6px; }
+  .earn-label { font-size: 12px; font-weight: bold; color: var(--gold); }
+  .earn-pts { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+  /* STORE */
+  .store-item {
+    background: var(--dark3);
+    border: 1px solid #1A1A1A;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .store-item:active { border-color: var(--gold-dark); }
+  .store-item-info {}
+  .store-item-name { font-size: 15px; font-weight: bold; margin-bottom: 2px; }
+  .store-item-desc { font-size: 11px; color: var(--text-dim); }
+  .store-item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0A0A00;
+    border-top: 1px solid var(--gold-dark);
+    display: flex;
+    z-index: 200;
+  }
+  .nav-btn {
+    flex: 1;
+    padding: 10px 4px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+  .nav-btn.active { color: var(--gold); }
+  .nav-btn:active { color: var(--gold-light); }
+  .nav-icon { font-size: 20px; line-height: 1; margin-bottom: 2px; }
+  .nav-label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* BUTTONS */
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: var(--black);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .btn-gold:active { transform: scale(0.98); opacity: 0.9; }
+  .btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-dark);
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .btn-outline:active { background: #1A1400; }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-dim);
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+  .loading::after {
+    content: '';
+    animation: dots 1.5s infinite;
+  }
+  @keyframes dots {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #1A1A1A;
+    margin-bottom: 16px;
+  }
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid #1A1A1A;
+    margin: 16px 0;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold-dark);
+    color: var(--black);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-text { font-size: 13px; letter-spacing: 1px; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    background: #1A1A1A;
+    border-radius: 4px;
+    height: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+
+  /* OPEN BOT BTN */
+  .open-bot-bar {
+    background: linear-gradient(135deg, #1A1400, #0D0A00);
+    border: 1px solid var(--gold-dark);
+    border-radius: 12px;
+    margin: 16px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+  .open-bot-bar:active { background: #2A2000; }
+  .open-bot-text { font-size: 13px; font-weight: bold; color: var(--gold); letter-spacing: 2px; }
+  .open-bot-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- SCREEN: HOME -->
+<div class="screen active" id="screen-home">
+  <div class="topbar">
+    <div class="topbar-title">BAZRAGOD Network</div>
+    <div class="topbar-coins" id="home-coins">— coins</div>
+  </div>
+  <div class="hero">
+    <div class="hero-name">BAZRAGOD</div>
+    <div class="hero-sub">Parish 14 Nation — I.A.A.I.M.O</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat-fans">—</div>
+        <div class="hero-stat-label">Fans</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat-songs">—</div>
+        <div class="hero-stat-label">Songs</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat-plays">—</div>
+        <div class="hero-stat-label">Plays</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-nav">
+    <div class="grid-btn" onclick="showScreen('music')">
+      <div class="grid-btn-icon">🎵</div>
+      <div class="grid-btn-label">Music Hub</div>
+      <div class="grid-btn-sub">Catalog + Buy</div>
+    </div>
+    <div class="grid-btn" onclick="showScreen('coins')">
+      <div class="grid-btn-icon">🪙</div>
+      <div class="grid-btn-label">MiserCoins</div>
+      <div class="grid-btn-sub">Earn + Rank</div>
+    </div>
+    <div class="grid-btn" onclick="showScreen('passport')">
+      <div class="grid-btn-icon">🪪</div>
+      <div class="grid-btn-label">Passport</div>
+      <div class="grid-btn-sub">Your Identity</div>
+    </div>
+    <div class="grid-btn" onclick="showScreen('vault')">
+      <div class="grid-btn-icon">🔐</div>
+      <div class="grid-btn-label">Secret Vault</div>
+      <div class="grid-btn-sub">Unlock Exclusives</div>
+    </div>
+    <div class="grid-btn" onclick="showScreen('leaderboard')">
+      <div class="grid-btn-icon">🏆</div>
+      <div class="grid-btn-label">Leaderboard</div>
+      <div class="grid-btn-sub">Top Fans</div>
+    </div>
+    <div class="grid-btn" onclick="showScreen('store')">
+      <div class="grid-btn-icon">🛒</div>
+      <div class="grid-btn-label">Store</div>
+      <div class="grid-btn-sub">Book + Buy</div>
+    </div>
+  </div>
+  <a class="open-bot-bar" href="https://t.me/BazragodMiserbot_bot" target="_blank">
+    <div class="open-bot-text">OPEN BAZRAGOD BOT</div>
+    <div class="open-bot-sub">Full platform inside Telegram</div>
+  </a>
+</div>
+
+<!-- SCREEN: MUSIC -->
+<div class="screen" id="screen-music">
+  <div class="topbar">
+    <div class="topbar-title">Music Hub</div>
+    <div class="topbar-coins" id="music-coins">— coins</div>
+  </div>
+  <div class="section">
+    <div class="section-title">BAZRAGOD Catalog</div>
+    <div id="music-list"><div class="loading">Loading catalog</div></div>
+  </div>
+</div>
+
+<!-- SCREEN: COINS -->
+<div class="screen" id="screen-coins">
+  <div class="topbar">
+    <div class="topbar-title">MiserCoins</div>
+    <div class="topbar-coins" id="coins-topbar">— coins</div>
+  </div>
+  <div class="coins-hero">
+    <div class="coins-amount" id="coins-amount">—</div>
+    <div class="coins-label">MiserCoins</div>
+    <div class="coins-tier" id="coins-tier">Fan</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Your Stats</div>
+    <div class="passport-row" style="padding: 0">
+      <div>
+        <div class="passport-label">Global Rank</div>
+        <div class="passport-rank" id="coins-rank">#—</div>
+      </div>
+      <div>
+        <div class="passport-label">Invites</div>
+        <div class="passport-rank" id="coins-invites">—</div>
+      </div>
+    </div>
+    <div class="passport-label" style="margin-top:12px" id="coins-next"></div>
+    <div class="progress-bar"><div class="progress-fill" id="coins-progress" style="width:0%"></div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">How to Earn</div>
+    <div class="earn-grid">
+      <div class="earn-card" onclick="openBot()">
+        <div class="earn-icon">🎵</div>
+        <div class="earn-label">Play Songs</div>
+        <div class="earn-pts">+8 coins each</div>
+      </div>
+      <div class="earn-card" onclick="openBot()">
+        <div class="earn-icon">👥</div>
+        <div class="earn-label">Invite Friends</div>
+        <div class="earn-pts">+50 coins each</div>
+      </div>
+      <div class="earn-card" onclick="openBot()">
+        <div class="earn-icon">📍</div>
+        <div class="earn-label">Share Location</div>
+        <div class="earn-pts">+15 coins</div>
+      </div>
+      <div class="earn-card" onclick="openBot()">
+        <div class="earn-icon">🎯</div>
+        <div class="earn-label">Daily Mission</div>
+        <div class="earn-pts">+100 coins</div>
+      </div>
+      <div class="earn-card" onclick="openBot()">
+        <div class="earn-icon">🤖</div>
+        <div class="earn-label">Chat MAXIMUS</div>
+        <div class="earn-pts">+2 coins</div>
+      </div>
+      <div class="earn-card" onclick="openBot()">
+        <div class="earn-icon">❤️</div>
+        <div class="earn-label">Like Songs</div>
+        <div class="earn-pts">+3 coins each</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: PASSPORT -->
+<div class="screen" id="screen-passport">
+  <div class="topbar">
+    <div class="topbar-title">Digital Passport</div>
+    <div class="topbar-coins" id="passport-coins">— coins</div>
+  </div>
+  <div id="passport-content"><div class="loading">Loading passport</div></div>
+</div>
+
+<!-- SCREEN: VAULT -->
+<div class="screen" id="screen-vault">
+  <div class="topbar">
+    <div class="topbar-title">Secret Vault</div>
+    <div class="topbar-coins" id="vault-coins">— coins</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Exclusive BAZRAGOD Music</div>
+    <div id="vault-list"><div class="loading">Loading vault</div></div>
+  </div>
+  <div style="padding: 0 16px">
+    <button class="btn-gold" onclick="openBot()">Unlock in Bot</button>
+    <button class="btn-outline" onclick="openBot()">Super Fan Bundle $500</button>
+  </div>
+</div>
+
+<!-- SCREEN: LEADERBOARD -->
+<div class="screen" id="screen-leaderboard">
+  <div class="topbar">
+    <div class="topbar-title">Leaderboard</div>
+    <div class="topbar-coins" id="lb-coins">— coins</div>
+  </div>
+  <div class="section">
+    <div class="tabs">
+      <div class="tab active" onclick="switchLbTab('alltime', this)">All Time</div>
+      <div class="tab" onclick="switchLbTab('week', this)">This Week</div>
+      <div class="tab" onclick="switchLbTab('today', this)">Today</div>
+    </div>
+    <div id="lb-list"><div class="loading">Loading leaderboard</div></div>
+  </div>
+</div>
+
+<!-- SCREEN: STORE -->
+<div class="screen" id="screen-store">
+  <div class="topbar">
+    <div class="topbar-title">Store</div>
+    <div class="topbar-coins" id="store-coins">— coins</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Music</div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Single Song</div>
+        <div class="store-item-desc">Instant download delivered via bot</div>
+      </div>
+      <div class="store-item-price">$5</div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Album Bundle</div>
+        <div class="store-item-desc">7 songs — best value</div>
+      </div>
+      <div class="store-item-price">$50</div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Beat License</div>
+        <div class="store-item-desc">Full rights, instant delivery</div>
+      </div>
+      <div class="store-item-price">$50</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Membership</div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Parish 14 Supporter</div>
+        <div class="store-item-desc">Nation Elite badge + early access</div>
+      </div>
+      <div class="store-item-price">$19.99<span style="font-size:10px;color:var(--text-dim)">/mo</span></div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Super Fan Bundle</div>
+        <div class="store-item-desc">All vault songs + merch</div>
+      </div>
+      <div class="store-item-price">$500</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Artist Booking</div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Feature Verse</div>
+        <div class="store-item-desc">BAZRAGOD on your track</div>
+      </div>
+      <div class="store-item-price">$5K</div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Small Club Show</div>
+        <div class="store-item-desc">Live performance booking</div>
+      </div>
+      <div class="store-item-price">$2.5K</div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Medium Club Show</div>
+        <div class="store-item-desc">Live performance booking</div>
+      </div>
+      <div class="store-item-price">$5K</div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Large Venue</div>
+        <div class="store-item-desc">Major event booking</div>
+      </div>
+      <div class="store-item-price">$15K</div>
+    </div>
+    <div class="store-item" onclick="openBot()">
+      <div class="store-item-info">
+        <div class="store-item-name">Video Cameo</div>
+        <div class="store-item-desc">Personal video from BAZRAGOD</div>
+      </div>
+      <div class="store-item-price">$1.2K</div>
+    </div>
+  </div>
+  <div style="padding: 0 16px 20px">
+    <button class="btn-gold" onclick="openBot()">Book via Telegram Bot</button>
+    <div style="text-align:center;font-size:11px;color:var(--text-dim);margin-top:8px">Miserbot.ai@gmail.com</div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="showScreen('home')" id="nav-home">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Home</div>
+  </button>
+  <button class="nav-btn" onclick="showScreen('music')" id="nav-music">
+    <div class="nav-icon">🎵</div>
+    <div class="nav-label">Music</div>
+  </button>
+  <button class="nav-btn" onclick="showScreen('coins')" id="nav-coins">
+    <div class="nav-icon">🪙</div>
+    <div class="nav-label">Coins</div>
+  </button>
+  <button class="nav-btn" onclick="showScreen('passport')" id="nav-passport">
+    <div class="nav-icon">🪪</div>
+    <div class="nav-label">Passport</div>
+  </button>
+  <button class="nav-btn" onclick="showScreen('store')" id="nav-store">
+    <div class="nav-icon">🛒</div>
+    <div class="nav-label">Store</div>
+  </button>
+</div>
+
+<script>
+const API = 'https://web-production-c03c9.up.railway.app';
+const BOT_URL = 'https://t.me/BazragodMiserbot_bot';
+let tgUser = null;
+let userPassport = null;
+let platformStats = null;
+let catalogData = null;
+let lbData = null;
+let vaultData = null;
+let currentScreen = 'home';
+
+// Init Telegram WebApp
+if (window.Telegram && window.Telegram.WebApp) {
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor('#0A0A0A');
+  tg.setBackgroundColor('#000000');
+  if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+    tgUser = tg.initDataUnsafe.user;
+  }
+}
+
+function openBot() {
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.openTelegramLink(BOT_URL);
+  } else {
+    window.open(BOT_URL, '_blank');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  const navBtn = document.getElementById('nav-' + name);
+  if (navBtn) navBtn.classList.add('active');
+  currentScreen = name;
+  if (name === 'music' && !catalogData) loadCatalog();
+  if (name === 'leaderboard' && !lbData) loadLeaderboard('alltime');
+  if (name === 'vault') loadVault();
+  if (name === 'passport') loadPassport();
+  if (name === 'coins') loadCoins();
+}
+
+async function fetchAPI(path) {
+  const res = await fetch(API + path);
+  return res.json();
+}
+
+async function loadStats() {
+  try {
+    const data = await fetchAPI('/api/stats');
+    platformStats = data;
+    document.getElementById('stat-fans').textContent = formatNum(data.fans);
+    document.getElementById('stat-songs').textContent = formatNum(data.songs);
+    document.getElementById('stat-plays').textContent = formatNum(data.total_plays);
+  } catch(e) {
+    console.log('Stats error', e);
+  }
+}
+
+async function loadPassportData() {
+  if (!tgUser) return;
+  try {
+    const data = await fetchAPI('/api/passport/' + tgUser.id);
+    userPassport = data;
+    const coinsEls = document.querySelectorAll('[id$="-coins"], #coins-topbar, #home-coins');
+    coinsEls.forEach(el => {
+      if (el) el.textContent = formatNum(data.points) + ' coins';
+    });
+    updateAllCoinDisplays(data.points);
+  } catch(e) {}
+}
+
+function updateAllCoinDisplays(pts) {
+  const ids = ['home-coins','music-coins','coins-topbar','passport-coins','vault-coins','lb-coins','store-coins'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = formatNum(pts) + ' coins';
+  });
+}
+
+async function loadCatalog() {
+  try {
+    const data = await fetchAPI('/api/catalog');
+    catalogData = data;
+    const list = document.getElementById('music-list');
+    if (!data.songs || data.songs.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="empty-icon">🎵</div><div class="empty-text">Catalog loading. Check back soon.</div></div>';
+      return;
+    }
+    list.innerHTML = data.songs.map((s, i) => `
+      <div class="song-card">
+        <div class="song-num">${i+1}</div>
+        <div class="song-info">
+          <div class="song-title">${s.title}</div>
+          <div class="song-meta">${formatNum(s.plays)} plays &nbsp; ${s.likes} likes</div>
+          <div class="song-fire">${getHeat(s.likes, s.plays)}</div>
+        </div>
+        <div class="song-actions">
+          <button class="btn-small outline" onclick="openBot()">Play</button>
+          <button class="btn-small" onclick="openBot()">$${s.price}</button>
+        </div>
+      </div>
+    `).join('') + (data.beats && data.beats.length > 0 ? `
+      <div class="section-title" style="margin-top:20px">Beats</div>
+      ${data.beats.map((b, i) => `
+        <div class="song-card">
+          <div class="song-num">${i+1}</div>
+          <div class="song-info">
+            <div class="song-title">${b.title}</div>
+            <div class="song-meta">${formatNum(b.plays)} plays</div>
+          </div>
+          <div class="song-actions">
+            <button class="btn-small" onclick="openBot()">$${b.price}</button>
+          </div>
+        </div>
+      `).join('')}
+    ` : '');
+    if (data.songs.length >= 7) {
+      list.innerHTML += `
+        <div style="background:linear-gradient(135deg,#1A1400,#0D0A00);border:1px solid var(--gold-dark);border-radius:12px;padding:16px;margin-top:16px;text-align:center">
+          <div style="font-size:13px;color:var(--gold);font-weight:bold;margin-bottom:4px">Album Bundle</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:12px">Get all ${data.songs.length} songs for $50</div>
+          <button class="btn-gold" onclick="openBot()">Buy Album $50</button>
+        </div>`;
+    }
+  } catch(e) {
+    document.getElementById('music-list').innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load catalog</div></div>';
+  }
+}
+
+async function loadPassport() {
+  const content = document.getElementById('passport-content');
+  if (!tgUser) {
+    content.innerHTML = `
+      <div class="empty" style="padding:40px 20px">
+        <div class="empty-icon">🪪</div>
+        <div class="empty-text" style="margin-bottom:20px">Open this page from inside Telegram to see your passport</div>
+      </div>
+      <div style="padding:0 16px">
+        <button class="btn-gold" onclick="openBot()">Open in Telegram</button>
+      </div>`;
+    return;
+  }
+  try {
+    const data = await fetchAPI('/api/passport/' + tgUser.id);
+    userPassport = data;
+    updateAllCoinDisplays(data.points);
+    const rankThresholds = [[0,'Fan'],[100,'Supporter'],[500,'Recruiter'],[1000,'Commander'],[2500,'General'],[5000,'Nation Elite'],[10000,'Parish Legend']];
+    let nextPts = 10000; let nextName = 'Parish Legend';
+    for (let [th, lb] of rankThresholds) {
+      if (data.points < th) { nextPts = th; nextName = lb; break; }
+    }
+    const pct = Math.min(100, (data.points / nextPts) * 100);
+    content.innerHTML = `
+      <div class="passport-card">
+        <div class="passport-header">
+          <div>
+            <div class="passport-logo">Parish 14 Nation</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">I.A.A.I.M.O</div>
+          </div>
+          <div class="passport-flag">🏴</div>
+        </div>
+        <div class="passport-field">
+          <div class="passport-label">Passport Number</div>
+          <div class="passport-value" style="font-size:14px;letter-spacing:2px">${data.passport_number || 'P14-00000'}</div>
+        </div>
+        <div class="passport-row">
+          <div class="passport-field" style="margin:0">
+            <div class="passport-label">Name</div>
+            <div class="passport-value" style="font-size:15px">@${data.username || tgUser.username || tgUser.first_name}</div>
+          </div>
+          <div class="passport-field" style="margin:0">
+            <div class="passport-label">Nation Tier</div>
+            <div><span class="passport-tier">${data.tier}</span></div>
+          </div>
+        </div>
+        <div class="passport-row">
+          <div>
+            <div class="passport-label">MiserCoins</div>
+            <div class="passport-rank">${formatNum(data.points)}</div>
+          </div>
+          <div>
+            <div class="passport-label">Global Rank</div>
+            <div class="passport-rank">#${data.global_rank}</div>
+          </div>
+        </div>
+        <div class="passport-row">
+          <div>
+            <div class="passport-label">Invites</div>
+            <div class="passport-value">${data.invites}</div>
+          </div>
+          <div>
+            <div class="passport-label">Downloads</div>
+            <div class="passport-value">${data.downloads}</div>
+          </div>
+        </div>
+        ${data.city ? `<div class="passport-field"><div class="passport-label">Location</div><div class="passport-value" style="font-size:14px">${data.city}, ${data.country || ''}</div></div>` : ''}
+        <div class="passport-label" style="margin-top:8px">Next: ${data.next_rank}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div style="padding:0 16px 20px">
+        <button class="btn-gold" onclick="openBot()">Open Full Platform</button>
+        <button class="btn-outline" onclick="openBot()">Book BAZRAGOD</button>
+      </div>`;
+  } catch(e) {
+    content.innerHTML = `
+      <div class="empty"><div class="empty-icon">🪪</div><div class="empty-text">Send /start to the bot first to create your passport</div></div>
+      <div style="padding:0 16px"><button class="btn-gold" onclick="openBot()">Start Bot</button></div>`;
+  }
+}
+
+async function loadCoins() {
+  if (!tgUser) {
+    document.getElementById('coins-amount').textContent = '—';
+    return;
+  }
+  try {
+    const data = userPassport || await fetchAPI('/api/passport/' + tgUser.id);
+    userPassport = data;
+    document.getElementById('coins-amount').textContent = formatNum(data.points);
+    document.getElementById('coins-tier').textContent = data.tier;
+    document.getElementById('coins-rank').textContent = '#' + data.global_rank;
+    document.getElementById('coins-invites').textContent = data.invites;
+    document.getElementById('coins-next').textContent = 'Next: ' + data.next_rank;
+    const rankThresholds = [[0,'Fan'],[100,'Supporter'],[500,'Recruiter'],[1000,'Commander'],[2500,'General'],[5000,'Nation Elite'],[10000,'Parish Legend']];
+    let nextPts = 10000;
+    for (let [th] of rankThresholds) { if (data.points < th) { nextPts = th; break; } }
+    const pct = Math.min(100, (data.points / nextPts) * 100);
+    document.getElementById('coins-progress').style.width = pct + '%';
+    updateAllCoinDisplays(data.points);
+  } catch(e) {}
+}
+
+async function loadLeaderboard(period) {
+  try {
+    const data = await fetchAPI('/api/leaderboard');
+    lbData = data;
+    const list = document.getElementById('lb-list');
+    if (!data.leaderboard || data.leaderboard.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="empty-icon">🏆</div><div class="empty-text">No fans ranked yet</div></div>';
+      return;
+    }
+    list.innerHTML = data.leaderboard.map((f, i) => {
+      const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'other';
+      const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
+      return `<div class="lb-item">
+        <div class="lb-rank ${rankClass}">${medal}</div>
+        <div class="lb-name">@${f.username}</div>
+        <div>
+          <div class="lb-pts">${formatNum(f.points)}</div>
+          <div class="lb-tier">${f.tier}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('lb-list').innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load leaderboard</div></div>';
+  }
+}
+
+function switchLbTab(period, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('lb-list').innerHTML = '<div class="loading">Loading</div>';
+  lbData = null;
+  loadLeaderboard(period);
+}
+
+async function loadVault() {
+  const list = document.getElementById('vault-list');
+  const uid = tgUser ? tgUser.id : 0;
+  try {
+    const data = await fetchAPI('/api/vault/' + uid);
+    vaultData = data;
+    if (uid && data.fan_coins !== undefined) {
+      updateAllCoinDisplays(data.fan_coins);
+    }
+    if (!data.vault || data.vault.length === 0) {
+      list.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><div class="empty-text">Vault content incoming. Stay tuned. Parish 14.</div></div>';
+      return;
+    }
+    list.innerHTML = data.vault.map(v => `
+      <div class="vault-item ${v.unlocked ? 'unlocked' : v.can_unlock ? '' : 'locked'}">
+        <div class="vault-title">${v.title}</div>
+        <div class="vault-req">${v.required_points.toLocaleString()} MiserCoins required</div>
+        <span class="vault-status ${v.unlocked ? 'unlocked' : v.can_unlock ? 'available' : 'locked'}">
+          ${v.unlocked ? 'UNLOCKED' : v.can_unlock ? 'TAP TO UNLOCK' : 'LOCKED'}
+        </span>
+        ${v.can_unlock || v.unlocked ? `<button class="btn-small" style="margin-top:10px;width:100%" onclick="openBot()">
+          ${v.unlocked ? 'Listen in Bot' : 'Unlock in Bot'}
+        </button>` : ''}
+      </div>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><div class="empty-text">Vault loading</div></div>';
+  }
+}
+
+function getHeat(likes, plays) {
+  const score = (likes * 5) + (plays / 1000);
+  if (score >= 250) return '🔥🔥🔥🔥🔥 FIRE x5';
+  if (score >= 100) return '🔥🔥🔥🔥 FIRE x4';
+  if (score >= 50) return '🔥🔥🔥 FIRE x3';
+  if (score >= 10) return '🔥🔥 FIRE x2';
+  return '🔥 FIRE';
+}
+
+function formatNum(n) {
+  if (!n) return '0';
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
+
+// INIT
+(async function init() {
+  await loadStats();
+  if (tgUser) {
+    await loadPassportData();
+  }
+})();
+</script>
+</body>
+</html>
